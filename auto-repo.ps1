@@ -3,11 +3,9 @@
 IDEA
 The idea of this script is to automate the process of adding, committing and pushing changes to a already made github repo.
 
-Dev Goals
-- Prompt user for GitHub username, repository name, and commit description.
-- Add all changes to the staging area.
-- Commit the changes with the provided description.
-- Push the changes to the remote repository.
+WANTED FEATURES
+1. Check for .gitignore file and create one if it doesn't exist.
+2. Add this script to the .gitignore file to prevent it from being committed.
 
 #>
 
@@ -29,6 +27,15 @@ $commitDescription = Read-Host -Prompt "Enter a commit description"
 $branch = Read-Host -Prompt "Enter the branch to push to (default is 'main')"
 if ([string]::IsNullOrWhiteSpace($branch)) {
     $branch = "main"
+}
+# check if the branch exists locally, if not, create it
+$localBranches = git branch --list $branch
+
+if (-not $localBranches) {
+    Write-Host "Branch '$branch' does not exist locally. Creating it."
+    git checkout -b $branch
+    # set $branch to this newly created branch
+    $branch = git rev-parse --abbrev-ref HEAD
 }
 
 # check if the repoName contains spaces or special characters and then make necessary adjustments or exit script
