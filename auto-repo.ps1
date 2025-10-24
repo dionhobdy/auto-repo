@@ -1,14 +1,3 @@
-<#
-
-IDEA
-The idea of this script is to automate the process of adding, committing and pushing changes to a already made github repo.
-
-WANTED FEATURES
-1. Check for .gitignore file and create one if it doesn't exist.
-2. Add this script to the .gitignore file to prevent it from being committed.
-
-#>
-
 # set title "Auto Repo" art as variable and then display it
 $title = @"
  _______  __   __  _______  _______    ______    _______  _______  _______ 
@@ -35,6 +24,8 @@ $scriptName = "auto-repo.ps1"
 if (-not (Get-Content -Path $gitignorePath | Select-String -Pattern [regex]::Escape($scriptName))) {
     Add-Content -Path $gitignorePath -Value $scriptName
     Write-Host "Added '$scriptName' to .gitignore."
+    # comment on the .gitignore file
+    Add-Content -Path $gitignorePath -Value "# auto-repo.ps1 is an repo automation script written by Dion Hobdy [https://github.com/dionhobdy/auto-repo]" -Force
 } else {
     Write-Host "'$scriptName' is already in .gitignore."
 }
@@ -82,7 +73,8 @@ try {
     Write-Host "Repo exists!" 
 } catch {
     Write-Host "Repo does not exist or is private! Exiting script."
-    Write-Host "Please create the repository on GitHub before running this script."
+    Write-Host "1. Create the repository on GitHub before running this script."
+    Write-Host "2. Run 'git init' in this directory if you haven't already."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
