@@ -33,12 +33,12 @@ if ([string]::IsNullOrWhiteSpace($branch)) {
 
 # check if the repoName contains spaces or special characters and then make necessary adjustments or exit script
 if ($repoName -match '\s') {
-    Write-Host "❌ Repository name contains special spaces. Changing spaces to hyphens."
+    Write-Host "Repository name contains special spaces. Changing spaces to hyphens."
     $repoName = $repoName -replace '\s', '-'
-    Write-Host "✅ New repository name: $repoName"
+    Write-Host "New repository name: $repoName"
 }
 if ($repoName -match '[^a-zA-Z0-9\-_]') {
-    Write-Host "❌ Repository name contains special characters other than hyphens or underscores. Exiting script."
+    Write-Host "Repository name contains special characters other than hyphens or underscores. Exiting script."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
@@ -49,9 +49,9 @@ $apiUrl = "https://api.github.com/repos/$username/$repoName"
 # check if the repository exists on GitHub
 try {
     Invoke-WebRequest -Uri $apiUrl -ErrorAction Stop
-    Write-Host "✅ Repo exists!" 
+    Write-Host "Repo exists!" 
 } catch {
-    Write-Host "❌ Repo does not exist or is private! Exiting script."
+    Write-Host "Repo does not exist or is private! Exiting script."
     Write-Host "Please create the repository on GitHub before running this script."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
@@ -78,14 +78,14 @@ if ($confirmation -eq "y") {
     }
     # set the remote origin using the provided username and repository name
     git remote remove origin 2>$null
-    git remote set-url origin "https://github.com/$username/$repoName.git"
+    git remote add origin "https://github.com/$username/$repoName.git"
     # push the items to the remote repository
     git push -u origin $branch
     # notify user of successful push
     Write-Host "Changes have been successfully pushed to the repository '$repoName' under the user '$username'."
     # display the new changes after pushing
     git status
-    Write-Host "✅ Operation completed successfully. Exiting script."
+    Write-Host "Operation completed successfully. Exiting script."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 } else {
