@@ -1,14 +1,3 @@
-<#
-
-IDEA
-The idea of this script is to automate the process of adding, committing and pushing changes to a already made github repo.
-
-WANTED FEATURES
-1. Check for .gitignore file and create one if it doesn't exist.
-2. Add this script to the .gitignore file to prevent it from being committed.
-
-#>
-
 # set title "Auto Repo" art as variable and then display it
 $title = @"
  _______  __   __  _______  _______    ______    _______  _______  _______ 
