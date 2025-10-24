@@ -8,7 +8,7 @@
 |__| |__||_______|  |___|  |_______|  |___|  |_||_______||___|    |_______|
 ```
 
-## AUTO - REPO
+## ABOUT - AUTO - REPO
 Auto Repo is a GitHub commit/push automation script. If your GitHub account is authenticated to your terminal, all you would have to do is enter your username and repo name. Special characters are currently not permitted for the repo name.
 
 ## UNDER - THE - HOOD
