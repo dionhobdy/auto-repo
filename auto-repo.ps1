@@ -9,16 +9,35 @@ WANTED FEATURES
 
 #>
 
-# ensure the current directory is marked as a safe directory for git operations
-$currentDir = (Get-Location).Path
-git config --global --add safe.directory $currentDir
-
-# set title art as variable and then display it
+# set title "Auto Repo" art as variable and then display it
 $title = @"
-Auto-Repo by Dion Hobdy 
-[https://github.com/dionhobdy]
+ _______  __   __  _______  _______    ______    _______  _______  _______ 
+|   _   ||  | |  ||       ||       |  |    _ |  |       ||       ||       |
+|  |_|  ||  | |  ||_     _||   _   |  |   | ||  |    ___||    _  ||   _   |
+|       ||  |_|  |  |   |  |  | |  |  |   |_||_ |   |___ |   |_| ||  | |  |
+|       ||       |  |   |  |  |_|  |  |    __  ||    ___||    ___||  |_|  |
+|   _   ||       |  |   |  |       |  |   |  | ||   |___ |   |    |       |
+|__| |__||_______|  |___|  |_______|  |___|  |_||_______||___|    |_______|
+By Dion Hobdy [https://github.com/dionhobdy/auto-repo]
 "@
 Write-Host $title
+
+# add a .gitignore file if it doesn't exist
+$gitignorePath = ".gitignore"
+if (-not (Test-Path -Path $gitignorePath)) {
+    Write-Host ".gitignore file not found. Creating one."
+    New-Item -Path $gitignorePath -ItemType File -Force | Out-Null
+} else {
+    Write-Host ".gitignore file already exists."
+}
+# add this script to the .gitignore file if it's not already there
+$scriptName = "auto-repo.ps1"
+if (-not (Get-Content -Path $gitignorePath | Select-String -Pattern [regex]::Escape($scriptName))) {
+    Add-Content -Path $gitignorePath -Value $scriptName
+    Write-Host "Added '$scriptName' to .gitignore."
+} else {
+    Write-Host "'$scriptName' is already in .gitignore."
+}
 
 # create variables requesting username and repo name.
 $username = Read-Host -Prompt "Enter your GitHub username"
@@ -49,6 +68,10 @@ if ($repoName -match '[^a-zA-Z0-9\-_]') {
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 }
+
+# ensure the current directory is marked as a safe directory for git operations
+$currentDir = (Get-Location).Path
+git config --global --add safe.directory $currentDir
 
 # establish the GitHub API URL for checking repository existence
 $apiUrl = "https://api.github.com/repos/$username/$repoName"
