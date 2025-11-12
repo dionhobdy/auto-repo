@@ -38,7 +38,7 @@ foreach ($entry in $requiredIgnores) {
 $commentLine = "# auto-repo: ignore node modules and the automation script"
 if (-not (Get-Content -Path $gitignorePath -ErrorAction SilentlyContinue | Select-String -SimpleMatch $commentLine)) {
     Add-Content -Path $gitignorePath -Value $commentLine
-}
+} 
 
 # create variables requesting username and repo name.
 $username = Read-Host -Prompt "Enter your GitHub username"
@@ -68,6 +68,7 @@ if ($repoName -match '[^a-zA-Z0-9\-_]') {
     Write-Host "Repository name contains special characters other than hyphens or underscores. Exiting script."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
 }
 
 # ensure the current directory is marked as a safe directory for git operations
@@ -87,6 +88,7 @@ try {
     Write-Host "2. Run 'git init' in this directory if you haven't already."
     Write-Host "Press any key to exit."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
 }
 
 # add all files to the staging area
