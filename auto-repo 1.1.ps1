@@ -113,6 +113,16 @@ if ($confirmation -eq "y") {
     # set the remote origin using the provided username and repository name
     git remote remove origin 2>$null
     git remote add origin "https://github.com/$username/$repoName.git"
+    # fetch and merge remote changes before pushing
+    Write-Host "Fetching remote changes..."
+    git fetch origin $branch 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "Merging remote changes..."
+        git pull origin $branch --no-rebase --allow-unrelated-histories 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Warning: Could not merge remote changes automatically. Attempting force push with lease..."
+        }
+    }
     # push the items to the remote repository
     git push -u origin $branch
     # notify user of successful push
