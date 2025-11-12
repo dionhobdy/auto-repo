@@ -11,6 +11,31 @@ By Dion Hobdy [https://github.com/dionhobdy/auto-repo]
 "@
 Write-Host $title
 
+# Check if git is installed
+try {
+    git --version | Out-Null
+} catch {
+    Write-Host "Error: Git is not installed or not in PATH. Please install Git and try again."
+    Write-Host "Press any key to exit."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
+}
+
+# Check if current directory is a git repository
+if (-not (Test-Path -Path ".git")) {
+    Write-Host "This directory is not a git repository."
+    $initConfirm = Read-Host -Prompt "Would you like to initialize it as a git repository? (y/n)"
+    if ($initConfirm -eq "y") {
+        git init
+        Write-Host "Git repository initialized."
+    } else {
+        Write-Host "Cannot proceed without a git repository. Exiting script."
+        Write-Host "Press any key to exit."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit
+    }
+}
+
 # ensure a .gitignore file exists
 $gitignorePath = ".gitignore"
 if (-not (Test-Path -Path $gitignorePath)) {
